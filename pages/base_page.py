@@ -1,4 +1,3 @@
-import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
@@ -13,7 +12,7 @@ class BasePage:
         self.driver.get(url)
 
     def clean_popups_if_exists(self):
-        """Метод для автоматического закрытия всплывающих окон Газпромбанка"""
+
         print("Проверяем наличие всплывающих окон и куки...")
 
         cookie_btn_locator = (By.XPATH, (
@@ -24,7 +23,6 @@ class BasePage:
         advert_close_locator = (By.XPATH,
                                 "//button[./svg] | //*[contains(@class, 'close') or contains(@class, 'Close')]")
 
-        # Закрываем куки
         try:
             cookie_btn = WebDriverWait(self.driver, 4).until(EC.element_to_be_clickable(cookie_btn_locator))
 
@@ -33,7 +31,6 @@ class BasePage:
         except TimeoutException:
             print("[ПОП-АП] Первое окно не появилось, проверяем следующее...")
 
-        # Закрываем дополнительную рекламу
         try:
             advert_close = WebDriverWait(self.driver, 2).until(EC.element_to_be_clickable(advert_close_locator))
 
@@ -43,7 +40,7 @@ class BasePage:
             print("[ПОП-АП] Дополнительных баннеров не обнаружено.")
 
     def click_element(self, locator, timeout=10):
-        """Безопасный клик по элементу с ожиданием"""
+
         element = WebDriverWait(self.driver, timeout).until(
             EC.element_to_be_clickable(locator)
         )
@@ -54,7 +51,7 @@ class BasePage:
             self.driver.execute_script("arguments[0].click();", element)
 
     def get_element_text(self, locator, timeout=15):
-        """Получение текста из элемента"""
+
         element = WebDriverWait(self.driver, timeout).until(
             EC.visibility_of_element_located(locator)
         )

@@ -5,7 +5,6 @@ from pages.base_page import BasePage
 class GpbMainPage(BasePage):
     URL = "https://gazprombank.ru"
 
-    # Локатор кнопки перехода на Премиум
     PREMIUM_MENU_LINK = (By.XPATH,
                          "//p[text()='Премиум'] | //p[contains(@class, 'MenuTilesItem') and text()='Премиум']")
 

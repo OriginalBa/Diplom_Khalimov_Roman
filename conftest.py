@@ -38,7 +38,7 @@ def _make_driver(width, height, browser_name, browser_version, headless):
 
     elif browser_name == "edge":
         options = EdgeOptions()
-        # Защита от ботов и анти-фрода для Edge (на базе Chromium)
+
         options.add_argument("--disable-extensions")
         options.add_argument("--disable-popup-blocking")
         options.add_argument("--disable-blink-features=AutomationControlled")

@@ -26,7 +26,6 @@ class GpbPremiumPage(BasePage):
         self.clean_popups_if_exists()
 
     def _click_tab_via_js(self, locator, tab_name):
-        """Внутренний вспомогательный метод для безопасного переключения вкладок"""
         print(f"Ждем готовности интерфейса перед переходом на вкладку '{tab_name}'...")
         time.sleep(3)
         element = WebDriverWait(self.driver, 15).until(EC.presence_of_element_located(locator))
