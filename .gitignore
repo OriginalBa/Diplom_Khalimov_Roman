@@ -1,0 +1,12 @@
+# Исключаем служебную папку PyCharm
+.idea/
+
+# Исключаем кэш Python и виртуальное окружение
+__pycache__/
+*.pyc
+venv/
+
+# Исключаем локальные отчеты
+allure-results/
+allure-report/
+report.html
