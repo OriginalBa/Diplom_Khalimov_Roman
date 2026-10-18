@@ -22,7 +22,7 @@ class GpbPremiumPage(BasePage):
     def open(self):
         print(f"Открываем страницу Премиума НАПРЯМУЮ: {self.URL}")
         self.open_url(self.URL)
-        self.driver.maximize_window()
+
         self.clean_popups_if_exists()
 
     def _click_tab_via_js(self, locator, tab_name):

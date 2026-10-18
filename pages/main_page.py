@@ -12,7 +12,7 @@ class GpbMainPage(BasePage):
     def open(self):
         print(f"Открываем главную страницу Газпромбанка: {self.URL}")
         self.open_url(self.URL)
-        self.driver.maximize_window()
+
         self.clean_popups_if_exists()
 
     def click_premium(self):
