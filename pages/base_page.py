@@ -12,32 +12,25 @@ class BasePage:
         self.driver.get(url)
 
     def clean_popups_if_exists(self):
+        print("Проверяем наличие всплывающих окон и куки (Desktop/Mobile)...")
 
-        print("Проверяем наличие всплывающих окон и куки...")
+        locators = [
+            (By.XPATH, "//button[@title='Закрыть']"),
+            (By.XPATH, "//button[contains(@class, 'ButtonClose_root')]"),
+            (By.XPATH, "//*[contains(text(), 'Хорошо') or contains(text(), 'Принять') or contains(text(), 'ОК')]"),
+            (By.XPATH, "//*[contains(@class, 'close') or contains(@class, 'Close')]")
+        ]
 
-        cookie_btn_locator = (By.XPATH, (
-            "//button[@title='Закрыть'] | "
-            "//*[contains(text(), 'Хорошо') or contains(text(), 'Принять') or contains(text(), 'ОК')]"
-        ))
+        for locator in locators:
+            try:
 
-        advert_close_locator = (By.XPATH,
-                                "//button[./svg] | //*[contains(@class, 'close') or contains(@class, 'Close')]")
+                element = WebDriverWait(self.driver, 1.5).until(EC.element_to_be_clickable(locator))
 
-        try:
-            cookie_btn = WebDriverWait(self.driver, 4).until(EC.element_to_be_clickable(cookie_btn_locator))
+                self.driver.execute_script("arguments[0].click();", element)
+                print(f"[ПОП-АП] Успешно закрыт элемент с локатором: {locator[1]}")
+            except TimeoutException:
 
-            self.driver.execute_script("arguments[0].click();", cookie_btn)
-            print("[ПОП-АП] Окно Cookie/Баннер успешно закрыто.")
-        except TimeoutException:
-            print("[ПОП-АП] Первое окно не появилось, проверяем следующее...")
-
-        try:
-            advert_close = WebDriverWait(self.driver, 2).until(EC.element_to_be_clickable(advert_close_locator))
-
-            self.driver.execute_script("arguments[0].click();", advert_close)
-            print("[ПОП-АП] Дополнительный рекламный баннер успешно закрыт.")
-        except TimeoutException:
-            print("[ПОП-АП] Дополнительных баннеров не обнаружено.")
+                continue
 
     def click_element(self, locator, timeout=10):
 
