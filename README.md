@@ -63,7 +63,7 @@
 
 1. Склонируйте репозиторий:
    ```bash
-   git clone https://github.com
+   git clone https://github.com/OriginalBa/Diplom_Khalimov_Roman/tree/finalwork
    ```
 2. Создайте и активируйте виртуальное окружение, затем установите зависимости:
    ```bash
