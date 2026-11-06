@@ -3,13 +3,13 @@ import requests
 from jsonschema import validate
 from pages.gpb_api_schemas import FIO_JSON_SCHEMA, EMAIL_JSON_SCHEMA
 
+
 class GpbApiClient:
 
     def __init__(self):
         self.base_url = "https://gazprombank.ru"
         self.session = requests.Session()
 
-        # Полный набор заголовков реального браузера (Chrome) для обхода защитных систем
         self.session.headers.update(
             {
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -41,10 +41,8 @@ class GpbApiClient:
                     attachment_type=allure.attachment_type.JSON,
                 )
 
-            # Выполняем сам HTTP-запрос
             response = self.session.request(method, url, **kwargs)
 
-            # 2. Логируем полученный ответ в Allure
             allure.attach(
                 f"Status: {response.status_code}\nHeaders: {dict(response.headers)}",
                 name="Response Info",
@@ -66,24 +64,18 @@ class GpbApiClient:
             return response
 
     def get_email_predictions(self, query: str, ab_segment: str = "segment03"):
-        """Получение списка подсказок для email на основе введенного текста."""
+
         method_url = "/api/v1/gazprombank/prediction/email/list/"
         params = {"ab_segment": ab_segment, "query": query}
         response = self._send_request("GET", method_url, params=params)
 
-        # Автоматически проверяем структуру JSON-ответа на соответствие схеме
         with allure.step("Автоматическая валидация JSON-схемы Email"):
             validate(instance=response.json(), schema=EMAIL_JSON_SCHEMA)
 
         return response
 
     def get_fio_predictions(self, query: str, parts: str, ab_segment: str = "segment03"):
-        """
-        Получение подсказок для ФИО на основе введенного текста.
-        :param query: Вводимая строка (например, 'Иванов' или 'Иван')
-        :param parts: Тип поля ('surname' для фамилии, 'name' для имени)
-        :param ab_segment: Сегмент тестирования
-        """
+
         method_url = "/api/v1/gazprombank/prediction/fio/list/"
         params = {
             "ab_segment": ab_segment,
@@ -92,7 +84,6 @@ class GpbApiClient:
         }
         response = self._send_request("GET", method_url, params=params)
 
-        # Автоматически проверяем структуру JSON-ответа на соответствие схеме
         with allure.step("Автоматическая валидация JSON-схемы ФИО"):
             validate(instance=response.json(), schema=FIO_JSON_SCHEMA)
 

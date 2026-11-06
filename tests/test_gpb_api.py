@@ -19,37 +19,32 @@ class TestGpbEmailPrediction:
         ("Ильгизович", "second_name", "second_name")
     ])
     def test_fio_predictions_pom(self, query, parts, expected_key):
-        # Шаг 1: Запрос и автоматическая валидация JSON-схемы (происходит внутри метода клиента)
+
         response = self.api_client.get_fio_predictions(query=query, parts=parts)
 
-        # Шаг 2: Проверка HTTP статус-кода
         with allure.step("Проверка статус-кода ответа"):
             assert response.status_code == 200, f"Ожидался код 200, но получен {response.status_code}"
 
         data = response.json()
 
-        # Шаг 3: Бизнес-валидация логики наполнения полей
         with allure.step(f"Бизнес-проверка содержимого для поля {parts} с запросом {query}"):
             assert len(data["items"]) > 0, f"Бэкенд вернул пустой список для ФИО: {query}"
 
             for item in data["items"]:
-                # Проверяем, что поисковый запрос присутствует в целевом поле или общем value
                 assert query in item[expected_key] or item[expected_key] in query or query in item["value"], \
                     f"Подсказка не совпадает с поисковым запросом. Ожидалось совпадение с: {query}"
 
     @allure.story("Проверка подсказок Email с автоматической валидацией контракта")
     @pytest.mark.parametrize("search_query", ["3235", "3235@mail.ru"])
     def test_email_predictions_pom(self, search_query):
-        # Шаг 1: Запрос и автоматическая валидация JSON-схемы (происходит внутри метода клиента)
+
         response = self.api_client.get_email_predictions(query=search_query)
 
-        # Шаг 2: Проверка HTTP статус-кода
         with allure.step("Проверка статус-кода ответа"):
             assert response.status_code == 200, f"Ожидался код 200, но получен {response.status_code}"
 
         data = response.json()
 
-        # Шаг 3: Бизнес-валидация логики в зависимости от наличия знака @
         with allure.step(f"Бизнес-проверка содержимого для email-запроса: {search_query}"):
             if "@" in search_query:
                 assert len(data["items"]) > 0, f"Ожидались подсказки для email: {search_query}"
