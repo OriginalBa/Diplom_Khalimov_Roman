@@ -1,10 +1,12 @@
 import allure
+import pytest
 from pages.main_page import GpbMainPage
 from pages.premium_page import GpbPremiumPage
 
 
 @allure.epic("Автоматизация банковских сайтов")
 @allure.feature("Навигация и парсинг условий")
+@pytest.mark.ui
 class TestGpbPremium:
 
     @allure.story("Сквозной переход с главной страницы на Премиум")
